@@ -11,7 +11,7 @@
 
 ## 📱 Preview
 
-[react native 3.webm](https://github.com/user-attachments/assets/51f6b8f3-76ab-4df9-859f-9be2f3f0c841)
+[Demo](https://github.com/user-attachments/assets/51f6b8f3-76ab-4df9-859f-9be2f3f0c841)
 
 ## 📦 Tecnologias
 
