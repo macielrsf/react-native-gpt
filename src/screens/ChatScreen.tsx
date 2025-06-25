@@ -14,7 +14,8 @@ import uuid from "react-native-uuid";
 import { Ionicons } from "@expo/vector-icons";
 import { OPENAI_API_KEY } from "@env";
 
-import { useTheme } from "../theme/ThemeContext";
+import { useTheme } from "../contexts/theme/ThemeContext";
+import { useLanguage } from "../contexts/LanguageContext"; 
 
 type Message = {
   id: string;
@@ -29,6 +30,7 @@ export default function ChatScreen() {
   const scrollRef = useRef<FlatList>(null);
 
   const { theme, toggleTheme, isDark } = useTheme();
+  const { t, toggleLanguage, language } = useLanguage();
 
   const sendMessage = () => {
     if (!input.trim()) return;
@@ -112,6 +114,22 @@ export default function ChatScreen() {
       style={[styles.container, { backgroundColor: theme.background }]}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <View style={styles.header}>
+        <TouchableOpacity onPress={toggleTheme} style={styles.toggleButton}>
+          <Ionicons
+            name={isDark ? "sunny-outline" : "moon-outline"}
+            size={28}
+            color={theme.text}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={toggleLanguage} style={styles.toggleButton}>
+          <Ionicons
+            name="globe-outline"
+            size={28}
+            color={theme.text}
+          />
+        </TouchableOpacity>
+      </View>
       <FlatList
         ref={scrollRef}
         data={messages}
@@ -122,16 +140,9 @@ export default function ChatScreen() {
       />
 
       <View style={[styles.inputContainer, {backgroundColor: theme.background}]}>
-        <TouchableOpacity onPress={toggleTheme} style={styles.toggleButton}>
-          <Ionicons
-            name={isDark ? "sunny-outline" : "moon-outline"}
-            size={28}
-            color={theme.text}
-          />
-        </TouchableOpacity>
         <TextInput
           style={[styles.input, { backgroundColor: theme.inputBackground, color: theme.text }]}
-          placeholder="Digite sua pergunta..."
+          placeholder={t('placeholder')}
           placeholderTextColor={isDark ? "#aaa" : "#666"}
           value={input}
           onChangeText={setInput}
@@ -142,7 +153,7 @@ export default function ChatScreen() {
           style={[styles.sendButton, { backgroundColor: theme.sendButton }]}
           disabled={isStreaming}
         >
-          <Text style={styles.sendButtonText}>Enviar</Text>
+          <Text style={styles.sendButtonText}>{t('send')}</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
@@ -196,6 +207,13 @@ const styles = StyleSheet.create({
   },
   toggleButton: {
     alignSelf: "center",
-    marginRight: 10
+    marginRight: 20
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+  }
 });
